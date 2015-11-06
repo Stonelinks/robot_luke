@@ -5,21 +5,13 @@
 var LukeBot = require('../lib/robotluke');
 
 ///**
-// * Environment variables used to configure the bot:
-// *
-// *  BOT_API_KEY : the authentication token to allow the bot to connect to your slack organization. You can get your
-// *      token at the following url: https://<yourorganization>.slack.com/services/new/bot (Mandatory)
-// *  BOT_DB_PATH: the path of the SQLite database used by the bot
-// *  BOT_NAME: the username you want to give to the bot within your organisation.
+// * Environment variables used to configure the bot
 // */
-//var token = process.env.BOT_API_KEY || require('../token');
-//var dbPath = process.env.BOT_DB_PATH;
-//var name = process.env.BOT_NAME;
+var token = process.env.BOT_API_KEY || require('../secrets.js').token;
 
 var luke = new LukeBot({
-    token: require('../secrets.js').token,
-    name: 'robot_luke',
-    //dbPath: dbPath
+    token: token,
+    name: 'robot_luke'
 });
 
 luke.run();
