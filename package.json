@@ -17,11 +17,12 @@
   },
   "homepage": "https://github.com/Stonelinks/robot_luke",
   "dependencies": {
+    "botkit": "0.0.5",
+    "botkit-heroku-keepalive": "0.0.1",
     "cheerio": "0.19.0",
     "lodash": "3.10.1",
     "pokedex": "0.2.2",
     "request": "2.65.0",
-    "slackbots": "0.4.0",
-    "botkit": "0.0.5"
+    "slackbots": "0.4.0"
   }
 }

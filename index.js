@@ -2,6 +2,7 @@
  * Created by ld on 2/8/16.
  */
 var Botkit = require('botkit')
+var HerokuKeepalive = require('botkit-heroku-keepalive').default;
 
 // Expect a SLACK_TOKEN environment variable
 var slackToken = process.env.SLACK_TOKEN
@@ -11,6 +12,11 @@ if (!slackToken) {
 }
 
 var controller = Botkit.slackbot()
+var herokuKeepalive;
+controller.setupWebserver(process.env.PORT || 8080, function (err, webserver) {
+    herokuKeepalive = new HerokuKeepalive(webserver);
+});
+
 var bot = controller.spawn({
     token: slackToken
 })
@@ -19,6 +25,8 @@ bot.startRTM(function (err, bot, payload) {
     if (err) {
         throw new Error('Could not connect to Slack')
     }
+
+    herokuKeepalive.start();
 })
 
 controller.on('bot_channel_join', function (bot, message) {
