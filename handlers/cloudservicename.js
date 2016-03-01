@@ -3,43 +3,16 @@
  */
 
 var request = require('request');
-var cheerio = require('cheerio');
 
-module.exports = function (controller) {
+module.exports = function (controller){
 
-    controller.hears('cloud service name', ['direct_message', 'direct_mention'], function (bot, message) {
-
-        var url = 'https://en.wikipedia.org/wiki/List_of_Germanic_deities';
-
-        request(url, (error, response, html) => {
-            if (!error) {
-                var $ = cheerio.load(html);
-                var choices = [];
-                $('table.wikitable tr:not(:first-child)').each(function (_, row) {
-                    var name = cheerio(row).find('td:first-child').text();
-                    var meaning = cheerio(row).find('td:nth-child(2)').text().replace(/ *\[[^)]*\] */g, "");
-                    choices.push({
-                        name: name,
-                        meaning: meaning
-                    });
-                });
-                var choice = chooseRandom(choices);
-                var text = `Name: ${choice.name}\nMeaning: ${choice.meaning}`;
-                var attachments = [{
-                    fallback: text,
-                    pretext: 'Okay, here is one:',
-                    text: text
-                }];
-
-                bot.reply(message, {
-                    attachments: attachments
-                })
-            }
-        });
+    controller.hears(['vulnerability name'], ['direct_message', 'direct_mention'], function (bot, message) {
+        var firstWords = ['Aftermath','Alarm','April','Beard','Bomb','Bulldozer','Cable','Chicken','Clutch','Cow','Doctor','Drill','Ethernet','Explosion','Fancy','Fat','Forehead','Friction','Gas','Goldfish','Grasshopper','Grease','Green','Horn','Monday','Notify','Onion','Orange','Page','Pain','Paper','Pillow','Pint','Plastic','Poison','Popcorn','Reduction','Screen','Screw','Seeder','Sidecar','Sleet','Soil','Spike','Stranger','Straw','Target','Tin','Vault','Yak','Moose','Candle','Ostrich','Leaf','Heart','Shell','Brain','Rug','Beaver','Pillow','Lemon','Bottle','Box','Budgie'];
+        var secondWords = ['Arrest','Bake','Blast','Blush','Boil','Bounce','Brake','Bump','Burn','Bury','Carve','Charge','Choke','Clear','Cry','Burp','Dare','Decay','Disarm','Divide','Drop','Dump','Dust','End','Explode','Fail','Fart','Flood','Glue','Grate','Grip','Heat','Hook','Hug','Include','Jam','Jump','Kiss','Launch','Lick','Milk','Mine','Move','Muddle','Muncher','Orgasm','Part','Post','Press','Pull','Punch','Puncture','Punish','Push','Question','Reach','Refuse','Release','Roll','Rot','Rub','Ruin','Rush','Saw','Scare','Scorch','Scream','Scribble','Settle','Shock','Slap','Smoke','Split','Spoil','Squash','Squeak','Squeeeze','Squirt','Stain','Strip','Surprise','Tickle','Tie','Trap','Trick','Vanish','Wash','Whine','Whip','Wrap','Wriggle'];
+        bot.reply(message, chooseRandom(firstWords) + ' ' + chooseRandom(secondWords));
     })
-};
+}
 
-
-function chooseRandom(arr) {
+function chooseRandom (arr) {
     return arr[Math.floor(Math.random() * arr.length)];
 }
