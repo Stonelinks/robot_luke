@@ -17,8 +17,8 @@
   },
   "homepage": "https://github.com/Stonelinks/robot_luke",
   "dependencies": {
-    "botkit": "0.0.5",
-    "botkit-heroku-keepalive": "0.0.1",
+    "@ponko2/botkit-heroku-keepalive": "0.2.0",
+    "botkit": "0.0.8",
     "cheerio": "0.19.0",
     "request": "2.65.0"
   }

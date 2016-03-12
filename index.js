@@ -2,12 +2,11 @@
  * Created by ld on 2/8/16.
  */
 var Botkit = require('botkit');
-var HerokuKeepalive = require('botkit-heroku-keepalive').default;
+var HerokuKeepalive = require('@ponko2/botkit-heroku-keepalive').default;
 
 var fs = require('fs');
 var path = require('path');
 var handlersDir = './handlers';
-
 
 // Expect a SLACK_TOKEN environment variable
 var slackToken = process.env.SLACK_TOKEN;
@@ -17,9 +16,10 @@ if (!slackToken) {
 }
 
 var controller = Botkit.slackbot();
+
 var herokuKeepalive;
 controller.setupWebserver(process.env.PORT || 8080, function (err, webserver) {
-    herokuKeepalive = new HerokuKeepalive(webserver);
+    herokuKeepalive = new HerokuKeepalive(controller);
 });
 
 var bot = controller.spawn({
