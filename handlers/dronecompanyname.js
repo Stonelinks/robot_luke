@@ -13,11 +13,20 @@ module.exports = function (controller){
             'Sky',
             'Scan',
             'Precise',
+            'X-treme ',
+            'Future',
             'Air',
             'Fly',
             'Flyer',
+            'Eagle',
+            'X-',
+            'Falcon',
+            'Dragon',
             'Aero',
-            'Pix'
+            'Super',
+            'Mega',
+            'Pix',
+            'Aer',
         ];
         var secondWords = [
             'Drone',
@@ -25,6 +34,7 @@ module.exports = function (controller){
             'Deploy',
             'Sky',
             'Hawk',
+            'Mega',
             'Eagle',
             'Falcon',
             'Dragon',
@@ -42,7 +52,14 @@ module.exports = function (controller){
             '4d',
             '5d',
             '9d',
-            ' 3000'
+            '99d',
+            ' 3000',
+            'on',
+            'tube',
+            'tubes',
+            'me',
+            'ion',
+            'yon'
         ];
         bot.reply(message, 'Your drone company name is ' + chooseRandom(firstWords) + chooseRandom(secondWords));
     })
