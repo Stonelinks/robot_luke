@@ -2,6 +2,7 @@
  * Created by ld on 2/8/16.
  */
 var Botkit = require('botkit');
+var Cleverbot = require('cleverbot-node');
 var HerokuKeepalive = require('@ponko2/botkit-heroku-keepalive').default;
 
 var fs = require('fs');
@@ -17,6 +18,10 @@ if (!slackToken) {
 
 var controller = Botkit.slackbot();
 
+var cleverbotToken = process.env.CLEVERBOT_TOKEN;
+var cleverbot = new Cleverbot;
+cleverbot.configure({botapi: cleverbotToken});
+    
 var herokuKeepalive;
 controller.setupWebserver(process.env.PORT || 8080, function (err, webserver) {
     herokuKeepalive = new HerokuKeepalive(controller);
@@ -40,10 +45,13 @@ bot.startRTM(function (err, bot, payload) {
         bot.reply(message, 'This is intentionally left blank')
     });
 
-    controller.hears('.*', ['direct_message', 'direct_mention'], function (bot, message) {
-        bot.reply(message, `Sorry <@${message.user}>, I don't understand. Maybe try asking for help with a command?`)
-    });
 
+
+    controller.hears('.*', ['direct_message', 'direct_mention'], function (bot, message) {
+        cleverbot.write(message.text, function (response) {
+            bot.reply(message, response.output);
+        });
+    })
 
     herokuKeepalive.start();
     console.log('booted')
