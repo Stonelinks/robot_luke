@@ -45,17 +45,46 @@ bot.startRTM(function (err, bot, payload) {
         bot.reply(message, 'This is intentionally left blank')
     });
 
+    var talkClever = function(bot, message, prefix, messageText) {
+      prefix = prefix || ''
+      var messageText = messageText || message.text
+      cleverbot.write(messageText, function (response) {
+        try {
+          bot.reply(message, prefix + ' ' + response.output);
+        } catch (e) {
+          console.error(e)
+        }
+      })
+    }
 
+    var cleverIntervals = {}
+
+    controller.hears('talk to (.*)', ['direct_message', 'direct_mention'], function (bot, message) {
+      var matches = message.text.match(/talk to (.*)/i);
+      var user = matches[1];
+      
+      bot.reply(message, user + ' we\'re best friends now')
+      cleverIntervals[user] = setInterval(function() {
+        talkClever(bot, message, user, 'go on a rant')
+      }, 20 * 1000)
+    })
+
+    controller.hears('stop talking to (.*)', ['direct_message', 'direct_mention'], function (bot, message) {
+      var matches = message.text.match(/stop talking to (.*)/i);
+      var user = matches[1];
+      
+      bot.reply(message, user + ' we\'re no longer best friends')
+      clearInterval(cleverIntervals[user])
+    })
 
     controller.hears('.*', ['direct_message', 'direct_mention'], function (bot, message) {
-        cleverbot.write(message.text, function (response) {
-            bot.reply(message, response.output);
-        });
+      talkClever(bot, message)
     })
 
     herokuKeepalive.start();
     console.log('booted')
 });
+
 //
 //controller.hears(['attachment'], ['direct_message', 'direct_mention'], function (bot, message) {
 //    var text = 'Beep Beep Boop is a ridiculously simple hosting platform for your Slackbots.';
