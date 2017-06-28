@@ -9,6 +9,10 @@ var fs = require('fs')
 var path = require('path')
 var handlersDir = './handlers'
 
+function chooseRandom (arr) {
+    return arr[Math.floor(Math.random() * arr.length)];
+}
+
 // Expect a SLACK_TOKEN environment variable
 var slackToken = process.env.SLACK_TOKEN
 if (!slackToken) {
@@ -63,10 +67,29 @@ bot.startRTM(function (err, bot, payload) {
     var matches = message.text.match(/talk to (.*)/i)
     var user = matches[1]
 
-    bot.reply(message, user + " we're best friends now")
-    cleverIntervals[user] = setInterval(function () {
-      talkClever(bot, message, user, 'go on a rant')
-    }, 20 * 1000)
+    if (cleverIntervals[user]) {
+      bot.reply(message, "I'm already talking to " + user)
+    } else {
+      bot.reply(message, user + " we're best friends now")
+      cleverIntervals[user] = setInterval(function () {
+        talkClever(bot, message, user, chooseRandom([
+          'go on a rant',
+          'hey hows it going?',
+          'who are you',
+          'bob saget',
+          'ask me something',
+          'ask me something',
+          'ask me something',
+          'ask me something',
+          'ask me something',
+          'where is the restroom',
+          'i have to go to the bathroom',
+          'i\'m lost',
+          'help me',
+          'help me',
+        ]))
+      }, 20 * 1000)
+    }
   })
 
   controller.hears('stop talking to (.*)', ['direct_message', 'direct_mention'], function (bot, message) {
@@ -112,3 +135,4 @@ bot.startRTM(function (err, bot, payload) {
 //    })
 // })
 //
+
